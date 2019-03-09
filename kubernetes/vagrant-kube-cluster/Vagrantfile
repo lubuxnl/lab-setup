@@ -55,7 +55,7 @@ SCRIPT
 
 $script_master_root = <<SCRIPT
 # create kubernetes cluster
-kubeadm init --apiserver-advertise-address 192.168.56.101 --pod-network-cidr=192.168.0.0/16
+kubeadm init --apiserver-advertise-address 192.168.56.101 --pod-network-cidr=192.168.0.0/16 | tee /vagrant/kubeadm-init.log
 SCRIPT
 
 $script_master_vagrant = <<SCRIPT
@@ -84,8 +84,7 @@ helm init --service-account tiller
 SCRIPT
 
 $script_worker_root = <<SCRIPT
-# replace with actual token and hash!!
-kubeadm join 192.168.56.101:6443 --token n6qyxs.6j3y4c9ivj8vzkvf --discovery-token-ca-cert-hash sha256:a7f7ebb1fcdbd3e145727da057274da2806006e28f7c71e844a1700d7e1e2ccb
+grep "kubeadm join" /vagrant/kubeadm-init.log | bash
 SCRIPT
 
 end
